@@ -45,7 +45,6 @@ Set-PoshPrompt -Theme powerlevel10k_rainbow
 # Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionSource History
 
-
 # vim binding to powershell, uncoment one or the other
 Set-PSReadlineOption -EditMode vi
 # Set-PSReadLineOption -EditMode Windows
@@ -69,6 +68,7 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 # 设置列表历史选项, F2切换
+# This only works with powershell 7 and later
 set-psreadlineoption -PredictionViewStyle ListView
 set-psreadlineoption -PredictionViewStyle InlineView
 
