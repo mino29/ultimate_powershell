@@ -1,4 +1,22 @@
 
+# Chocolatey profile
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+	Import-Module "$ChocolateyProfile"
+}
+
+
+
+
+<#
+ * FileName: Microsoft.PowerShell_profile.ps1
+ * Author: Wu Zhongzheng
+ * Email: zhongzheng.wu@outlook.com
+ * Date: 2022, Mar. 6
+ * Copyright: No copyright. You can use this code for anything with no warranty.
+#>
+
+
 #------------------------------- Import Modules BEGIN -------------------------------
 # 引入 posh-git
 Import-Module posh-git
@@ -15,9 +33,7 @@ Import-Module -Name Terminal-Icons
 
 # 设置 PowerShell 主题
 # Set-PoshPrompt ys
-Set-PoshPrompt -Theme powerlevel10k_rainbow 
-# oh-my-posh --init --shell pwsh --config C:/Users/mino29/scoop/apps/oh-my-posh/current/themes/powerlevel10k_rainbow.omp.json | Invoke-Expression
-
+Set-PoshPrompt -Theme powerlevel10k_rainbow
 #------------------------------- Import Modules END   -------------------------------
 
 
@@ -27,12 +43,12 @@ Set-PoshPrompt -Theme powerlevel10k_rainbow
 #-------------------------------  Set Hot-keys BEGIN  -------------------------------
 # 设置预测文本来源为历史记录
 # Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-
-
 Set-PSReadLineOption -PredictionSource History
 
-Set-PSReadLineOption -EditMode Windows
 
+# vim binding to powershell, uncoment one or the other
+Set-PSReadlineOption -EditMode vi
+# Set-PSReadLineOption -EditMode Windows
 
 # 每次回溯输入历史，光标定位于输入内容末尾
 Set-PSReadLineOption -HistorySearchCursorMovesToEnd
@@ -53,8 +69,8 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 # 设置列表历史选项, F2切换
-# set-psreadlineoption -PredictionViewStyle ListView
-# set-psreadlineoption -PredictionViewStyle InlineView
+set-psreadlineoption -PredictionViewStyle ListView
+set-psreadlineoption -PredictionViewStyle InlineView
 
 #-------------------------------  Set Hot-keys END    -------------------------------
 
@@ -68,27 +84,34 @@ $env:PATHEXT += ";.py"
 
 # 更新系统组件
 function Update-Packages {
-	# update pip
-	Write-Host "Step 1: 更新 pip" -ForegroundColor Magenta -BackgroundColor Cyan
-	$a = pip list --outdated
-	$num_package = $a.Length - 2
-	for ($i = 0; $i -lt $num_package; $i++) {
-		$tmp = ($a[2 + $i].Split(" "))[0]
-		pip install -U $tmp
-	}
+	# update conda packages (avoid conflit)
+	Write-Host "Step 1: Update conda " -ForegroundColor Magenta -BackgroundColor Cyan
+    conda update --all
+    
+	# update pip (comment out this if you use conda)
+	# Write-Host "Step 1: 更新 pip" -ForegroundColor Magenta -BackgroundColor Cyan
+	# $a = pip list --outdated
+	# $num_package = $a.Length - 2
+	# for ($i = 0; $i -lt $num_package; $i++) {
+	# 	$tmp = ($a[2 + $i].Split(" "))[0]
+	# 	pip install -U $tmp
+	# }
 
 	# update TeX Live
 	$CurrentYear = Get-Date -Format yyyy
-	Write-Host "Step 2: 更新 TeX Live" $CurrentYear -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 2: Update TeX Live" $CurrentYear -ForegroundColor Magenta -BackgroundColor Cyan
 	tlmgr update --self
 	tlmgr update --all
 
 	# update Chocolotey
-	Write-Host "Step 3: 更新 Chocolatey" -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 3: Update Chocolatey" -ForegroundColor Magenta -BackgroundColor Cyan
 	choco outdated
-    choco update --all
-}
+    choco upgrade --all
 
+	# update Scoop
+	Write-Host "Step 4: Update Scoop" -ForegroundColor Magenta -BackgroundColor Cyan
+    scoop update --all
+}
 #-------------------------------    Functions END     -------------------------------
 
 
@@ -110,7 +133,7 @@ function ListDirectory {
 	(Get-ChildItem).Name
 	Write-Host("")
 }
-# Set-Alias -Name ls -Value ListDirectory
+Set-Alias -Name ls -Value ListDirectory -Option AllScope
 Set-Alias -Name ll -Value Get-ChildItem
 
 # 4. 打开当前工作目录
@@ -126,19 +149,16 @@ function OpenCurrentFolder {
 }
 Set-Alias -Name open -Value OpenCurrentFolder
 
+# 5. neovim aliases/ change nvim to vim if you use vim
 
-# 5. 用vi vim代替nvim
-if ((Get-Command nvim -ErrorAction Ignore)) {
-    if (-not (Get-Command vim -ErrorAction Ignore)) {
-        Set-Alias vim nvim
-    }
-    if (-not (Get-Command vi -ErrorAction Ignore)) {
-        Set-Alias vi vim
-    }
-    if (-not (Get-Command gvim -ErrorAction Ignore)) {
-        Set-Alias gvim nvim-qt
-    }
-}
+Set-Alias -Name v -Value nvim
+Set-Alias -Name vi -Value nvim
+Set-Alias -Name vim -Value nvim
+
+# 6. more "aliases"
+# Set-Alias -Name ":q" -Value "exit"
+Set-Alias -Name cc -Value clear
+
 #-------------------------------    Set Alias END     -------------------------------
 
 
