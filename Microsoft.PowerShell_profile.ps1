@@ -36,13 +36,6 @@ Import-Module -Name Terminal-Icons
 Import-Module ZLocation
 
 
-
-
-
-
-
-
-
 # 设置 PowerShell 主题
 # Set-PoshPrompt ys
 Set-PoshPrompt -Theme powerlevel10k_rainbow
