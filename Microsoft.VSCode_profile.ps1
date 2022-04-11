@@ -34,6 +34,10 @@ Import-Module -Name Terminal-Icons
 # full command-let is invoke-Zlocation, z for short
 # z c: will get you to c drive
 Import-Module ZLocation
+Write-Host -Foreground Green "`n[ZLocation] knows about $((Get-ZLocation).Keys.Count) locations.`n"
+
+
+
 
 
 
