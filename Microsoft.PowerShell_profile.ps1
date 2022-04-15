@@ -38,7 +38,8 @@ Import-Module ZLocation
 
 # 设置 PowerShell 主题
 # Set-PoshPrompt ys
-Set-PoshPrompt -Theme powerlevel10k_rainbow
+Set-PoshPrompt -Theme atomicBit
+# Set-PoshPrompt -Theme C:\Users\Scarlet\.config\oh-my-posh_custom\powerlevel10k_rainbow.omp.json
 #------------------------------- Import Modules END   -------------------------------
 
 
@@ -197,3 +198,14 @@ Set-Alias -Name getip6 -Value Get-IPv6Routes
 
 
 #-------------------------------    Set z.lua END     -------------------------------
+
+
+
+#-------------------------------   Set starship BEGIN    -------------------------------
+
+# $ENV:STARSHIP_CONFIG = "$HOME\.starship\starship.toml"
+# # $ENV:STARSHIP_DISTRO = " 者 x 💀 "
+# Invoke-Expression (&starship init powershell)
+
+#-------------------------------   Set starship END    -------------------------------
+
