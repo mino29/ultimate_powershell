@@ -38,7 +38,7 @@ Import-Module ZLocation
 
 # 设置 PowerShell 主题
 # Set-PoshPrompt ys
-Set-PoshPrompt -Theme atomicBit
+Set-PoshPrompt -Theme powerlevel10k_rainbow
 # Set-PoshPrompt -Theme C:\Users\Scarlet\.config\oh-my-posh_custom\powerlevel10k_rainbow.omp.json
 #------------------------------- Import Modules END   -------------------------------
 
@@ -75,8 +75,8 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 # 设置列表历史选项, F2切换
-set-psreadlineoption -PredictionViewStyle ListView
-set-psreadlineoption -PredictionViewStyle InlineView
+# set-psreadlineoption -PredictionViewStyle ListView
+# set-psreadlineoption -PredictionViewStyle InlineView
 
 #-------------------------------  Set Hot-keys END    -------------------------------
 
@@ -86,6 +86,7 @@ set-psreadlineoption -PredictionViewStyle InlineView
 
 #-------------------------------    Functions BEGIN   -------------------------------
 # Python 直接执行
+# This will use you default python interpreter
 $env:PATHEXT += ";.py"
 
 # 更新系统组件
@@ -95,27 +96,29 @@ function Update-Packages {
     conda update --all
     
 	# update pip (comment out this if you use conda)
-	# Write-Host "Step 1: 更新 pip" -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 2: Update pip" -ForegroundColor Magenta -BackgroundColor Cyan
 	# $a = pip list --outdated
 	# $num_package = $a.Length - 2
 	# for ($i = 0; $i -lt $num_package; $i++) {
 	# 	$tmp = ($a[2 + $i].Split(" "))[0]
 	# 	pip install -U $tmp
 	# }
+    pip freeze | %{$_.split('==')[0]} | %{pip install --upgrade $_}
 
 	# update TeX Live
 	$CurrentYear = Get-Date -Format yyyy
-	Write-Host "Step 2: Update TeX Live" $CurrentYear -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 3: Update TeX Live" $CurrentYear -ForegroundColor Magenta -BackgroundColor Cyan
 	tlmgr update --self
 	tlmgr update --all
 
 	# update Chocolotey
-	Write-Host "Step 3: Update Chocolatey" -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 4: Update Chocolatey" -ForegroundColor Magenta -BackgroundColor Cyan
 	choco outdated
-    choco upgrade --all
+    choco upgrade all
 
 	# update Scoop
-	Write-Host "Step 4: Update Scoop" -ForegroundColor Magenta -BackgroundColor Cyan
+	Write-Host "Step 5: Update Scoop" -ForegroundColor Magenta -BackgroundColor Cyan
+    scoop update
     scoop update --all
 }
 #-------------------------------    Functions END     -------------------------------
